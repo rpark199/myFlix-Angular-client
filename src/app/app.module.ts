@@ -14,9 +14,10 @@ import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserRegComponentComponent } from './user-reg-component/user-reg-component.component';
 
 @NgModule({
-	declarations: [AppComponent],
+	declarations: [AppComponent, UserRegComponentComponent],
 	imports: [
 		BrowserModule,
 		HttpClientModule,
