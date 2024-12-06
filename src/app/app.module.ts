@@ -12,30 +12,25 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { UserRegistrationFormComponent } from './user-registration-form/user-registration-form.component';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    UserRegistrationFormComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    FormsModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatSnackBarModule
-  ],
-  providers: [
-    provideAnimationsAsync()
-  ],
-  bootstrap: [AppComponent]
+	declarations: [AppComponent],
+	imports: [
+		BrowserModule,
+		HttpClientModule,
+		AppRoutingModule,
+		FormsModule,
+		BrowserAnimationsModule,
+		MatDialogModule,
+		MatInputModule,
+		MatButtonModule,
+		MatCardModule,
+		MatFormFieldModule,
+		MatSnackBarModule,
+	],
+	providers: [provideAnimationsAsync()],
+	bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
