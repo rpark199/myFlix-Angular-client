@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
 	selector: 'app-user-registration-form',
@@ -6,5 +6,7 @@ import { Component, OnInit } from '@angular/core';
 	styleUrl: './user-registration-form.component.scss',
 })
 export class UserRegistrationFormComponent implements OnInit {
+	@Input() userData = { Username: '', Password: '', Email: '', Birthday: '' };
 	ngOnInit(): void {}
+	registerUser(): void {}
 }
