@@ -11,6 +11,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,12 +19,10 @@ import { LoginComponent } from './login/login.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { UserRegistrationFormComponent } from './user-registration-form/user-registration-form.component';
 
+bootstrapApplication(AppComponent);
 @NgModule({
 	declarations: [
-		AppComponent, 
-		UserRegistrationFormComponent, 
-		LoginComponent, 
-		WelcomePageComponent
+		
 	],
 	imports: [
 		BrowserModule,
@@ -38,7 +37,6 @@ import { UserRegistrationFormComponent } from './user-registration-form/user-reg
 		MatFormFieldModule,
 		MatSnackBarModule,
 	],
-	providers: [provideAnimationsAsync()],
-	bootstrap: [AppComponent]
+	providers: [],
 })
 export class AppModule {}
