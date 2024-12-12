@@ -14,10 +14,17 @@ import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserRegComponentComponent } from './user-reg-component/user-reg-component.component';
+import { LoginComponent } from './login/login.component';
+import { WelcomePageComponent } from './welcome-page/welcome-page.component';
+import { UserRegistrationFormComponent } from './user-registration-form/user-registration-form.component';
 
 @NgModule({
-	declarations: [AppComponent, UserRegComponentComponent],
+	declarations: [
+		AppComponent, 
+		UserRegistrationFormComponent, 
+		LoginComponent, 
+		WelcomePageComponent
+	],
 	imports: [
 		BrowserModule,
 		HttpClientModule,
@@ -32,6 +39,6 @@ import { UserRegComponentComponent } from './user-reg-component/user-reg-compone
 		MatSnackBarModule,
 	],
 	providers: [provideAnimationsAsync()],
-	bootstrap: [AppComponent],
+	bootstrap: [AppComponent]
 })
 export class AppModule {}
