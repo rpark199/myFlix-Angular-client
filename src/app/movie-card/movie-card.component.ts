@@ -1,107 +1,144 @@
-import { Component, OnInit } from '@angular/core';
-import { FetchApiDataService } from '../fetch-api-data.service';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import {
+  AddToFavoritesService,
+  GetAllMoviesService,
+  GetUserDataService,
+  RemoveFromFavoritesService,
+} from '../fetch-api-data.service';
 import { MatDialog } from '@angular/material/dialog';
-import { MessageBoxComponent } from '../message-box/message-box.component';
+import { MatSnackBar } from '@angular/material/snack-bar'; // Import MatSnackBar
+import { MovieDialogComponent } from '../movie-dialog/movie-dialog.component';
 
+/**
+ * Component for the movie card, which displays movie details.
+ * It fetches all movies from the database and displays them in cards.
+ * It also allows users to add and remove movies from their favorites.
+ * It opens the movie dialog when a movie card is clicked.
+ */
 @Component({
-    selector: 'app-movie-card',
-    templateUrl: './movie-card.component.html',
-    styleUrl: './movie-card.component.scss'
+  selector: 'app-movie-card',
+  standalone: false,
+  templateUrl: './movie-card.component.html',
+  styleUrl: './movie-card.component.scss',
 })
-export class MovieCardComponent implements OnInit {
-    movies: any[] = [];
-    constructor(
-        public fetchApiData: FetchApiDataService,
-        public router: Router,
-        public dialog: MatDialog
-    ) { }
+export class MovieCardComponent {
+  movies: any[] = [];
+  favoriteMovies: string[] = []; // Store IDs of favorited movies
 
-    ngOnInit(): void {
-        this.getMovies();
-    }
+  constructor(
+    public fetchApiData: GetAllMoviesService,
+    public getUserDataService: GetUserDataService,
+    public addToFavoritesService: AddToFavoritesService,
+    public removeFromFavoritesService: RemoveFromFavoritesService,
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar // Inject MatSnackBar
+  ) {}
 
-    getMovies(): void {
-        this.fetchApiData.getAllMovies().subscribe(res => {
-            this.movies = res;
+  ngOnInit(): void {
+    this.getMovies();
+    this.getFavoriteMovies(); // Fetch favorites on initialization
+  }
 
-            let user = JSON.parse(localStorage.getItem("user") || "");
-            this.movies.forEach((movie: any) => {
-                movie.isFavorite = user.favoriteMovies.includes(movie._id);
-            })
-            return this.movies;
-        }, err => {
-            console.error(err)
-        })
-    }
+  /**
+   * Fetches all movies from the database.
+   * @returns {void} Movies array
+   */
+  getMovies(): void {
+    this.fetchApiData.getAllMovies().subscribe((resp: any) => {
+      this.movies = resp;
+      console.log(this.movies);
+    });
+  }
 
-    logout(): void {
-        this.router.navigate(["welcome"]);
-        localStorage.removeItem("user");
-    }
+  /**
+   * Opens the movie dialog with the movie details.
+   * @param {string} type - The type of dialog to open
+   * @param {any} data - The data to pass to the dialog
+   */
+  openDialog(type: string, data: any): void {
+    console.log('Dialog Type:', type);
+    console.log('Dialog Data:', data);
+    this.dialog.open(MovieDialogComponent, {
+      data: { type, data },
+      width: '400px',
+    });
+  }
 
-    redirectProfile(): void {
-        this.router.navigate(["profile"]);
-    }
+  /**
+   * Fetches the user's favorite movies from the database.
+   * @returns {void} Favorite movies array
+   */
+  getFavoriteMovies(): void {
+    this.getUserDataService.getUserData().subscribe((resp: any) => {
+      this.favoriteMovies = resp.FavoriteMovies || [];
+      console.log('Favorite Movies:', this.favoriteMovies);
+    });
+  }
 
-    modifyFavoriteMovies(movie: any): void {
-        let user = JSON.parse(localStorage.getItem("user") || "");
-        let icon = document.getElementById(`${movie._id}-favorite-icon`);
+  /**
+   * Checks if a movie is in the user's favorites.
+   * @param {any} movie - The movie to check
+   * @returns {boolean} Whether the movie is in favorites
+   */
+  isFavorite(movie: any): boolean {
+    return this.favoriteMovies.includes(movie._id);
+  }
 
-        if (user.favoriteMovies.includes(movie._id)) {
-            this.fetchApiData.deleteFavoriteMovie(user.id, movie.title).subscribe(res => {
-                icon?.setAttribute("fontIcon", "favorite_border");
-
-                console.log("del success")
-                console.log(res);
-                user.favoriteMovies = res.favoriteMovies;
-                localStorage.setItem("user", JSON.stringify(user));
-            }, err => {
-                console.error(err)
-            })
-        } else {
-            // icon?.setAttribute("fontIcon", "favorite");
-            // user.favoriteMovies.push(movie._id);
-            // addFavoriteMovie return unauth, debugging
-            this.fetchApiData.addFavoriteMovie(user.id, movie.title).subscribe(res => {
-                icon?.setAttribute("fontIcon", "favorite");
-
-                console.log("add success")
-                console.log(res);
-                user.favoriteMovies = res.favoriteMovies;
-                localStorage.setItem("user", JSON.stringify(user));
-            }, err => {
-                console.error(err)
-            })
+  /**
+   * Toggles a movie's favorite status.
+   * If the movie is already a favorite, it is removed.
+   * If the movie is not a favorite, it is added.
+   * @param {any} movie - The movie to toggle
+   * @returns {void} Updates the favoriteMovies array
+   * @returns {void} Shows a snackbar notification
+   */
+  toggleFavorite(movie: any): void {
+    if (this.isFavorite(movie)) {
+      // Remove from favorites
+      this.removeFromFavoritesService.removeFromFavorites(movie._id).subscribe(
+        () => {
+          console.log(`${movie.Title} removed from favorites.`);
+          this.favoriteMovies = this.favoriteMovies.filter(
+            (id) => id !== movie._id
+          ); // Update UI
+          // Show a snackbar notification
+          this.snackBar.open(`${movie.Title} removed from favorites.`, 'OK', {
+            duration: 3000,
+          });
+        },
+        (error) => {
+          console.error(`Error removing ${movie.Title} from favorites:`, error);
+          this.snackBar.open(
+            `Could not remove ${movie.Title} from favorites.`,
+            'OK',
+            {
+              duration: 3000,
+            }
+          );
         }
-        localStorage.setItem("user", JSON.stringify(user));
+      );
+    } else {
+      // Add to favorites
+      this.addToFavoritesService.addToFavorites(movie._id).subscribe(
+        () => {
+          console.log(`${movie.Title} added to favorites.`);
+          this.favoriteMovies.push(movie._id); // Update UI
+          // Show a snackbar notification
+          this.snackBar.open(`${movie.Title} added to favorites.`, 'OK', {
+            duration: 3000,
+          });
+        },
+        (error) => {
+          console.error(`Error adding ${movie.Title} to favorites:`, error);
+          this.snackBar.open(
+            `Could not add ${movie.Title} to favorites.`,
+            'OK',
+            {
+              duration: 3000,
+            }
+          );
+        }
+      );
     }
-
-    showGenre(movie: any): void {
-        this.dialog.open(MessageBoxComponent, {
-            data: {
-                title: String(movie.genre.type).toUpperCase(),
-                content: movie.genre.description
-            },
-            width: "400px"
-        })
-    }
-    showDirector(movie: any): void {
-        this.dialog.open(MessageBoxComponent, {
-            data: {
-                title: movie.director.name,
-                content: movie.genre.description
-            },
-            width: "400px"
-        })
-    }
-    showDetail(movie: any): void {
-        this.dialog.open(MessageBoxComponent, {
-            data: {
-                title: movie.title,
-                content: movie.description
-            },
-            width: "400px"
-        })
-    }
+  }
 }
