@@ -43,11 +43,11 @@ export class UserRegistrationFormComponent implements OnInit {
           }
         );
 
-        // Navigate to the login page
+        // Takes you to the login page
         this.router.navigate(['welcome']);
       },
       (error: any) => {
-        // Show an error message if registration fails
+        // Show an error message if the registration fails
         this.snackBar.open(
           'User registration failed: ' + error.error.message,
           'OK',
