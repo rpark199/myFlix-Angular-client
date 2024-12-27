@@ -31,3 +31,4 @@ export class WelcomePageComponent implements OnInit {
     });
   }
 }
+
