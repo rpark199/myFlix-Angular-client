@@ -7,8 +7,14 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-user-login-form',
   templateUrl: './user-login-form.component.html',
-  styleUrl: './user-login-form.component.css',
+  styleUrls: ['./user-login-form.component.scss'],
+  standalone: false, // ensure the dialog is not standalone
 })
+
+/**
+ * Component for the user login form.
+ * It provides a form for the user to enter their username and password.
+ */
 export class UserLoginFormComponent implements OnInit {
   @Input() userData = { Username: '', Password: '' };
 
@@ -21,22 +27,38 @@ export class UserLoginFormComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /**
+   * Logs in the user by calling the userLogin method from fetchApiData service.
+   * On successful login, stores the user data and token in localStorage, closes the dialog,
+   * shows a success message, and navigates to the movies page.
+   * If login fails, shows an error message.
+   *
+   * @returns {void}
+   */
   loginUser(): void {
     this.fetchApiData.userLogin(this.userData).subscribe(
       (result) => {
-        localStorage.setItem('user', JSON.stringify(result.user));
+        // Store the user data and token in localStorage
+        localStorage.setItem('user', result.user.Username);
         localStorage.setItem('token', result.token);
-        // Logic for a successful user registration goes here! (To be implemented)
-        this.dialogRef.close(); // This will close the modal on success!
-        this.snackBar.open('Login Successful', 'OK', {
+
+        // Close the dialog
+        this.dialogRef.close();
+
+        // Show a success message
+        this.snackBar.open('Login successful!', 'OK', {
+          duration: 2000,
+        });
+
+        // Navigate to the movies page
+        this.router.navigate(['movies']);
+      },
+      (error) => {
+        // Show an error message if login fails
+        this.snackBar.open('Login failed: ' + error.error.message, 'OK', {
           duration: 2000,
         });
       }
-      // (result) => {
-      //   this.snackBar.open(result, 'OK', {
-      //     duration: 2000,
-      //   });
-      // }
     );
   }
 }
