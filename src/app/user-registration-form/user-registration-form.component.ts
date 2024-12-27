@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { FetchApiDataService } from '../fetch-api-data.service';
+import { UserRegistrationService } from '../fetch-api-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-registration-form',
@@ -12,28 +13,49 @@ export class UserRegistrationFormComponent implements OnInit {
   @Input() userData = { Username: '', Password: '', Email: '', Birthday: '' };
 
   constructor(
-    public fetchApiData: FetchApiDataService,
+    public fetchApiData: UserRegistrationService,
     public dialogRef: MatDialogRef<UserRegistrationFormComponent>,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
 
-  // This is the function responsible for sending the form inputs to the backend
-  registerUser(): void {
+   /**
+   * Registers a new user by calling the userRegistration method from fetchApiData service.
+   * On successful registration, it closes the dialog, shows a success message, and navigates to the welcome page.
+   * If registration fails, it shows an error message.
+   *
+   * @returns {void}
+   */
+   registerUser(): void {
     this.fetchApiData.userRegistration(this.userData).subscribe(
-      (result) => {
-        // Logic for a successful user registration goes here! (To be implemented)
-        this.dialogRef.close(); // This will close the modal on success!
-        this.snackBar.open('Registration Successful', 'OK', {
-          duration: 2000,
-        });
+      (result: any) => {
+        // Close the dialog
+        this.dialogRef.close();
+
+        // Show a success message
+        this.snackBar.open(
+          'User registration successful! Please log in.',
+          'OK',
+          {
+            duration: 2000,
+          }
+        );
+
+        // Navigate to the login page
+        this.router.navigate(['welcome']);
+      },
+      (error: any) => {
+        // Show an error message if registration fails
+        this.snackBar.open(
+          'User registration failed: ' + error.error.message,
+          'OK',
+          {
+            duration: 2000,
+          }
+        );
       }
-      // (result) => {
-      //   this.snackBar.open(result, 'OK', {
-      //     duration: 2000,
-      //   });
-      // }
     );
   }
 }
