@@ -13,10 +13,10 @@ export class AppComponent {
   constructor(public router: Router) {}
 
   logout(): void {
-    // clear local storage
+    //  it clear local storage
     localStorage.clear();
 
-    //redirect to welcome page
+    //redirect users to welcome page
     this.router.navigate(['welcome']);
   }
 }
