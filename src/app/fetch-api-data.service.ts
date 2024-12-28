@@ -8,7 +8,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-const apiUrl = 'https://moviflex-a914bff79426.herokuapp.com/';
+const apiUrl = 'https://movie-api-ul5k.onrender.com/';
 @Injectable({
   providedIn: 'root',
 })
@@ -41,7 +41,7 @@ export class UserRegistrationService {
 export class UserLoginService {
   constructor(private http: HttpClient) {}
 
-  //Api call for user login
+  // api call for user login
   public userLogin(userDetails: any): Observable<any> {
     console.log(userDetails);
     return this.http
@@ -352,4 +352,3 @@ export class DeleteUserService {
     return throwError('Something bad happened; please try again later.');
   }
 }
-
