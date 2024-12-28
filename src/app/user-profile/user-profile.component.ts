@@ -80,7 +80,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   /**
-   * Saves changes to user data.
+   * Saves changes users made
    */
   saveChanges(): void {
     if (this.editForm.valid) {
