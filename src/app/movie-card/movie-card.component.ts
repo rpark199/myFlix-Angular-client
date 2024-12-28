@@ -6,7 +6,7 @@ import {
   RemoveFromFavoritesService,
 } from '../fetch-api-data.service';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar'; // Import MatSnackBar
+import { MatSnackBar } from '@angular/material/snack-bar'; 
 import { MovieDialogComponent } from '../movie-dialog/movie-dialog.component';
 
 /**
