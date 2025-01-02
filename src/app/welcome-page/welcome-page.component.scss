@@ -1,0 +1,25 @@
+.mat-toolbar-div {
+  display: flex;
+  flex: 1;
+  // flex-wrap: wrap;
+  justify-content: space-between flex-end;
+  align-items: center;
+}
+button {
+  font-size: 18px;
+  text-decoration: none;
+  color: white;
+  margin: 20px;
+  // margin-top: 80px;
+}
+button:hover,
+button:active {
+  color: lightgray;
+}
+
+mat-toolbar {
+  background-color: red;
+  height: 120px;
+  justify-content: space-between;
+  margin: auto;
+}

@@ -1,22 +1,10 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  standalone: false, // ensure that the component is not treated as a standalone component
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'myFlix-Angular-client';
-
-  constructor(public router: Router) {}
-
-  logout(): void {
-    //  it clear local storage
-    localStorage.clear();
-
-    //redirect users to welcome page
-    this.router.navigate(['welcome']);
-  }
 }

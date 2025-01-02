@@ -11,7 +11,7 @@ describe('WelcomePageComponent', () => {
       declarations: [WelcomePageComponent]
     })
     .compileComponents();
-
+    
     fixture = TestBed.createComponent(WelcomePageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

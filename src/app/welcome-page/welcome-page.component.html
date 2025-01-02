@@ -1,22 +1,22 @@
-<div class="main-page">
-    <h1>
-      Welcome to myFlix!
-    </h1>
-    <button
-      mat-raised-button
-      (click)="openUserRegistrationDialog()"
-      style="margin-right: 10px;"
-      color="primary"
-    >
-      Sign Up
-    </button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="openUserLoginDialog()"
-      style="margin-right: 10px;"
-    >
-      Login
-    </button>
-  </div>
+<div class="mat-toolbar-div" style="display: flex">
+  <mat-toolbar>
+    <span style="color: white; font-size: 2em; font-family: sans-serif">
+      Welcome to MyFlix!
+    </span>
+    <div>
+      <button mat-flat-button (click)="openUserRegistrationDialog()">
+        <mat-icon>account_circle</mat-icon>
+        Sign Up
+      </button>
 
+      <button
+        mat-button
+        (click)="openUserLoginDialog()"
+        style="color: white; margin-right: 10px"
+      >
+        <mat-icon>login</mat-icon>
+        <span>Login</span>
+      </button>
+    </div>
+  </mat-toolbar>
+</div>
