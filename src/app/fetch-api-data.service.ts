@@ -8,7 +8,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-const apiUrl = 'https://movie-api-ul5k.onrender.com/';
+const apiUrl = 'https://moviflex-a914bff79426.herokuapp.com/';
 @Injectable({
   providedIn: 'root',
 })
